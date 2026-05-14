@@ -1,0 +1,49 @@
+# catalog-info.yaml — repo myorg/bff-web-service
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: openapi-bff-web
+  title: API BFF Web (Portal Cliente)
+  description: Contrato otimizado para o consumo da aplicação Web React.
+  tags: [rest, graphql, bff]
+  annotations:
+    github.com/project-slug: myorg/bff-web-service
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:squad-frontend
+  system: customer-portal
+  definition: |
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: Web BFF API
+    paths:
+      /me/dashboard:
+        get:
+          summary: Retorna a tela inicial do cliente
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: bff-web-service
+  title: BFF Web Backend
+  description: Backend Node.js que orquestra chamadas para gerar a tela do Portal Web.
+  tags: [nodejs, typescript, bff]
+  annotations:
+    github.com/project-slug: myorg/bff-web-service
+spec:
+  type: service
+  lifecycle: production
+  owner: group:squad-frontend
+  system: customer-portal
+  providesApis:
+    - openapi-bff-web
+  consumesApis:
+    - openapi-historico-veiculos
+    - openapi-faturas
+    - openapi-relatorios
+  dependsOn:
+    - resource:default/cache-bff-redis
